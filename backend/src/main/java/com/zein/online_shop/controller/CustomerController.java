@@ -1,6 +1,6 @@
 package com.zein.online_shop.controller;
 
-import com.zein.online_shop.dto.request.CreateCustomerRequest;
+import com.zein.online_shop.dto.request.CustomerRequest;
 import com.zein.online_shop.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,19 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody CreateCustomerRequest request) {
+    public ResponseEntity<?> create(@Valid @RequestBody CustomerRequest request) {
         var customer = customerService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody CustomerRequest request) {
+        return ResponseEntity.ok(customerService.update(id, request));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        customerService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

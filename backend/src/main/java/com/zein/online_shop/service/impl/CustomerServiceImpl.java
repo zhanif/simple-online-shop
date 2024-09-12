@@ -1,11 +1,12 @@
 package com.zein.online_shop.service.impl;
 
-import com.zein.online_shop.dto.request.CreateCustomerRequest;
+import com.zein.online_shop.dto.request.CustomerRequest;
 import com.zein.online_shop.dto.response.CustomerResponse;
 import com.zein.online_shop.model.Customer;
 import com.zein.online_shop.repository.CustomerRepository;
 import com.zein.online_shop.service.CustomerService;
 import com.zein.online_shop.utility.UniqueCodeGenerator;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
     }
 
     @Override
-    public CustomerResponse create(CreateCustomerRequest request) {
+    public CustomerResponse create(CustomerRequest request) {
         Customer customer = modelMapper.map(request, Customer.class);
         Customer result = null;
 
@@ -46,5 +47,25 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         }
 
         return modelMapper.map(result, CustomerResponse.class);
+    }
+
+    @Override
+    public CustomerResponse update(Integer id, CustomerRequest request) {
+        Customer customer = customerRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
+
+        customer.setName(request.getName());
+        customer.setAddress(request.getAddress());
+        customer.setPhone(request.getPhone());
+        customer.setIsActive(request.getIsActive());
+        customer.setPic(request.getPic());
+
+        Customer result = customerRepository.save(customer);
+        return modelMapper.map(result, CustomerResponse.class);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        customerRepository.deleteById(id);
     }
 }
