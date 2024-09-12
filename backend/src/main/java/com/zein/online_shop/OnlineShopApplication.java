@@ -3,7 +3,7 @@ package com.zein.online_shop;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "com.zein.online_shop" })
 public class OnlineShopApplication {
 
 	public static void main(String[] args) {
