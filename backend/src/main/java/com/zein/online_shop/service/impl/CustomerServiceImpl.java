@@ -1,6 +1,7 @@
 package com.zein.online_shop.service.impl;
 
 import com.zein.online_shop.dto.request.CustomerRequest;
+import com.zein.online_shop.dto.response.ListResponse;
 import com.zein.online_shop.dto.response.CustomerResponse;
 import com.zein.online_shop.model.Customer;
 import com.zein.online_shop.repository.CustomerRepository;
@@ -24,9 +25,19 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
     private final ModelMapper modelMapper;
 
     @Override
-    public List<CustomerResponse> getAll(int page, int size, List<String> sort) {
-        List<Customer> customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort)))).toList();
-        return Arrays.asList(modelMapper.map(customers, CustomerResponse[].class));
+    public ListResponse getAll(int page, int size, List<String> sort) {
+        var customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
+        List<CustomerResponse> responses = Arrays.asList(modelMapper.map(customers.toList(), CustomerResponse[].class));
+
+        return new ListResponse(responses, getPageMetadata(customers));
+    }
+
+    @Override
+    public CustomerResponse get(Integer id) {
+        var customer = customerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
+
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 
     @Override

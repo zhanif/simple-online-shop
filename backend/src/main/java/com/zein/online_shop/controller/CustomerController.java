@@ -26,6 +26,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getAll(page, size, sort));
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> get(@Valid @PathVariable Integer id) {
+        return ResponseEntity.ok(customerService.get(id));
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody CustomerRequest request) {
         var customer = customerService.create(request);
