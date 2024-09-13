@@ -1,8 +1,6 @@
 package com.zein.online_shop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,45 +11,42 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="items")
+@Table(name = "orders")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Item {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column
-    @NotBlank
-    private String name;
 
     @Column(unique = true)
     @NotBlank
     private String code;
 
-    @Column
-    @NotBlank
-    @Min(0)
-    private Integer stock;
-
-    @Column
-    @NotBlank
-    @Min(0)
-    private Integer price;
-
-    @Column
-    @NotBlank
-    private Boolean isAvailable;
-
     @Column(columnDefinition = "DATE")
     @NotBlank
-    private Date lastReStock;
+    private Date date;
+
+    @Column
+    @NotBlank
+    private Integer totalPrice;
+
+    @Column
+    @NotBlank
+    private Integer quantity;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @Column(name = "created_time")
     @CreatedDate
@@ -62,8 +57,4 @@ public class Item {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedTime;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "item")
-    private List<Order> orders;
 }

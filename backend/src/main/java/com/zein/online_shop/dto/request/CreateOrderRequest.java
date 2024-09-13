@@ -3,26 +3,25 @@ package com.zein.online_shop.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequest {
+public class CreateOrderRequest {
     @NotBlank
-    private String name;
+    private Integer customerId;
+    @NotBlank
+    private Integer itemId;
+    @NotBlank
+    @Min(1)
+    private Integer quantity;
     @NotNull
-    @Min(0)
-    private Integer stock;
-    @NotNull
-    @Min(0)
-    private Integer price;
-    @NotNull
-    private Boolean isAvailable;
-    private Date lastReStock;
+    @DateTimeFormat(pattern = "YYYY-mm-dd")
+    private Date date;
 }

@@ -17,7 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -67,11 +69,17 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
         Item item = itemRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Item (ID: " + id + ") not found"));
 
+        Date lastReStock = null;
+        if (request.getStock() > item.getStock()) {
+            lastReStock = Objects.requireNonNullElse(request.getLastReStock(), new Date());
+        }
+
         item.setName(request.getName());
         item.setPrice(request.getPrice());
         item.setStock(request.getStock());
-        item.setLastReStock(request.getLastReStock());
         item.setIsAvailable(request.getIsAvailable());
+
+        if (!Objects.isNull(lastReStock)) item.setLastReStock(lastReStock);
 
         item = itemRepository.save(item);
         return modelMapper.map(item, ItemResponse.class);

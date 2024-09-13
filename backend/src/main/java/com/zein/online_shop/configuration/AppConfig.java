@@ -1,8 +1,14 @@
 package com.zein.online_shop.configuration;
 
+import com.zein.online_shop.dto.response.CustomerResponse;
+import com.zein.online_shop.dto.response.ItemResponse;
+import com.zein.online_shop.dto.response.OrderResponse;
+import com.zein.online_shop.model.Order;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +58,16 @@ public class AppConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.getConfiguration().setPreferNestedProperties(false);
+
+        modelMapper.typeMap(Order.class, OrderResponse.class).addMappings(mapper -> {
+           mapper.map(src -> src.getCustomer().getId(), OrderResponse::setCustomerId);
+           mapper.map(src -> src.getItem().getId(), OrderResponse::setItemId);
+        });
+
+        return modelMapper;
     }
 }

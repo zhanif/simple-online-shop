@@ -13,16 +13,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequest {
-    @NotBlank
-    private String name;
+public class UpdateOrderRequest {
     @NotNull
-    @Min(0)
-    private Integer stock;
+    private Date date;
     @NotNull
-    @Min(0)
-    private Integer price;
-    @NotNull
-    private Boolean isAvailable;
-    private Date lastReStock;
+    @Min(1)
+    private Integer quantity;
 }
