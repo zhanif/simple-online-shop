@@ -7,10 +7,12 @@ import com.zein.online_shop.model.Customer;
 import com.zein.online_shop.repository.CustomerRepository;
 import com.zein.online_shop.service.CustomerService;
 import com.zein.online_shop.utility.UniqueCodeGenerator;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
 
     @Override
     public ListResponse getAll(int page, int size, List<String> sort) {
-        var customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
+        Page<Customer> customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
         List<CustomerResponse> responses = Arrays.asList(modelMapper.map(customers.toList(), CustomerResponse[].class));
 
         return new ListResponse(responses, getPageMetadata(customers));
@@ -34,7 +36,7 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
 
     @Override
     public CustomerResponse get(Integer id) {
-        var customer = customerRepository.findById(id)
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
 
         return modelMapper.map(customer, CustomerResponse.class);
@@ -42,26 +44,35 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
 
     @Override
     public CustomerResponse create(CustomerRequest request) {
-        Customer customer = modelMapper.map(request, Customer.class);
-        Customer result = null;
-
-        int maxLoop = 5;
-        while(maxLoop > 0) {
-            try {
-                customer.setCode(UniqueCodeGenerator.generate(6));
-                result = customerRepository.save(customer);
-                break;
-            }
-            catch(Exception e) {
-                maxLoop--;
-            }
+        if (customerRepository.existsByPhone(request.getPhone())) {
+            throw new EntityExistsException("Phone number is already exist");
         }
 
-        return modelMapper.map(result, CustomerResponse.class);
+        Customer customer = modelMapper.map(request, Customer.class);
+        int maxLoop = 5;
+
+        while(maxLoop > 0) {
+            // generating custom 6-digit code
+            String code = UniqueCodeGenerator.generate(6);
+
+            if (!customerRepository.existsByCode(code)) {
+                customer.setCode(code);
+                break;
+            }
+
+            maxLoop--;
+        }
+
+        customer = customerRepository.save(customer);
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 
     @Override
     public CustomerResponse update(Integer id, CustomerRequest request) {
+        if (customerRepository.existsByPhoneAndIdNot(request.getPhone(), id)) {
+            throw new EntityExistsException("Phone number is already exist");
+        }
+
         Customer customer = customerRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
 
@@ -71,8 +82,8 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         customer.setIsActive(request.getIsActive());
         customer.setPic(request.getPic());
 
-        Customer result = customerRepository.save(customer);
-        return modelMapper.map(result, CustomerResponse.class);
+        customer = customerRepository.save(customer);
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 
     @Override

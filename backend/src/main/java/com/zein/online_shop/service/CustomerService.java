@@ -9,10 +9,7 @@ import java.util.List;
 public interface CustomerService {
     ListResponse getAll(int page, int size, List<String> sort);
     CustomerResponse create(CustomerRequest request);
-
     CustomerResponse update(Integer id, CustomerRequest request);
-
     void delete(Integer id);
-
     CustomerResponse get(Integer id);
 }

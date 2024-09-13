@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Page<Customer> findAllBy(PageRequest pageRequest);
+    boolean existsByPhone(String phone);
+    boolean existsByCode(String code);
+    boolean existsByPhoneAndIdNot(String phone, Integer id);
 }
