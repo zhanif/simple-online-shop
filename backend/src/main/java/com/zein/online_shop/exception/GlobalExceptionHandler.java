@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -35,7 +36,11 @@ public class GlobalExceptionHandler {
         body.put("code", status.value());
         body.put("message", getMessage(e, status));
 
-        log.error(String.format("\n\nClass: %s", e.getClass().getCanonicalName()));
+        String stackTrace = Arrays.stream(e.getStackTrace())
+                .map(StackTraceElement::toString)
+                .collect(Collectors.joining("\n"));
+
+        log.error(String.format("\n\nMessage: \n%s\n\nClass:\n%s\n\nTrace:\n%s", e.getMessage(), e.getClass().getCanonicalName(), stackTrace));
 
         return new ResponseEntity<>(body, status);
     }

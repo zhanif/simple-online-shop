@@ -9,6 +9,8 @@ import com.zein.online_shop.service.CustomerService;
 import com.zein.online_shop.utility.UniqueCodeGenerator;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lib.minio.MinioService;
+import lib.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +18,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomerServiceImpl extends BaseServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
+    private final MinioService minioService;
+    private final RedisService redisService;
+    private static String REDIS_CACHE_PREFIX = "customer:pic:";
+    private static Duration REDIS_DURATION = Duration.ofMinutes(10);
+    private static String MINIO_BUCKET = "simple-online-shop";
+
 
     @Override
     public ListResponse getAll(int page, int size, List<String> sort) {
         Page<Customer> customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
-        List<CustomerResponse> responses = Arrays.asList(modelMapper.map(customers.toList(), CustomerResponse[].class));
+        List<CustomerResponse> responses = customers.stream().map(this::mapCustomerToResponse).toList();
 
         return new ListResponse(responses, getPageMetadata(customers));
     }
@@ -39,9 +52,10 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
 
-        return modelMapper.map(customer, CustomerResponse.class);
+        return mapCustomerToResponse(customer);
     }
 
+    @Transactional
     @Override
     public CustomerResponse create(CustomerRequest request) {
         if (customerRepository.existsByPhone(request.getPhone())) {
@@ -63,8 +77,14 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
             maxLoop--;
         }
 
+        if (request.getPic() != null && !request.getPic().isEmpty())  {
+            var uploaded = minioService.upload(request.getPic(), MINIO_BUCKET);
+            customer.setPic(uploaded.getFileName());
+        }
+
         customer = customerRepository.save(customer);
-        return modelMapper.map(customer, CustomerResponse.class);
+
+        return mapCustomerToResponse(customer);
     }
 
     @Override
@@ -80,14 +100,44 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         customer.setAddress(request.getAddress());
         customer.setPhone(request.getPhone());
         customer.setIsActive(request.getIsActive());
-        customer.setPic(request.getPic());
+
+        if (request.getPic() != null && !request.getPic().isEmpty()) {
+            minioService.remove(MINIO_BUCKET, customer.getPic());
+
+            var uploaded = minioService.upload(request.getPic(), MINIO_BUCKET);
+            customer.setPic(uploaded.getFileName());
+        }
 
         customer = customerRepository.save(customer);
-        return modelMapper.map(customer, CustomerResponse.class);
+        return mapCustomerToResponse(customer);
     }
 
     @Override
     public void delete(Integer id) {
+        Customer customer = customerRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
+
+        minioService.remove(MINIO_BUCKET, customer.getPic());
         customerRepository.deleteById(id);
+    }
+
+    private CustomerResponse mapCustomerToResponse(Customer customer) {
+        CustomerResponse response = modelMapper.map(customer, CustomerResponse.class);
+
+        if (customer.getPic() != null && !customer.getPic().isEmpty()) {
+            String cacheKey = REDIS_CACHE_PREFIX + customer.getId();
+            Object cachedUrl = redisService.getData(cacheKey);
+
+            if (cachedUrl == null) {
+                String imageUrl = minioService.getImageUrl(MINIO_BUCKET, customer.getPic(), REDIS_DURATION);
+                redisService.save(cacheKey, imageUrl, REDIS_DURATION);
+                response.setPic(imageUrl);
+            }
+            else {
+                response.setPic((String) cachedUrl);
+            }
+        }
+
+        return response;
     }
 }

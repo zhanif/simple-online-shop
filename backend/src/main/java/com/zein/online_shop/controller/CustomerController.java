@@ -32,13 +32,13 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody CustomerRequest request) {
+    public ResponseEntity<?> create(@Valid @ModelAttribute CustomerRequest request) {
         var customer = customerService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody CustomerRequest request) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @ModelAttribute CustomerRequest request) {
         return ResponseEntity.ok(customerService.update(id, request));
     }
 
