@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ListCustomerResponse } from '../models/response/list-customer-response.model';
+import { CustomerResponse } from '../models/response/customer-response.model';
+import { CustomerRequest } from '../models/request/customer-request.model';
+import { ListResponse } from '../models/response/list-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,23 @@ export class CustomerService {
     private http: HttpClient
   ) {}
 
-  public getAll(page: number, size: number = 10): Observable<ListCustomerResponse> {
-    return this.http.get<ListCustomerResponse>(`${this.apiUrl}?page=${page}&size=${size}`)
+  public getAll(page: number = 0, size: number = 10): Observable<ListResponse<CustomerResponse>> {
+    return this.http.get<ListResponse<CustomerResponse>>(`${this.apiUrl}?page=${page}&size=${size}`)
+  }
+
+  public get(id: number): Observable<CustomerResponse> {
+    return this.http.get<CustomerResponse>(`${this.apiUrl}/${id}`)
+  }
+
+  public create(request: CustomerRequest | FormData): Observable<any> {
+    return this.http.post(this.apiUrl, request)
+  }
+
+  public update(id: number, request: CustomerRequest): Observable<CustomerResponse> {
+    return this.http.put<CustomerResponse>(`${this.apiUrl}/${id}`, request)
+  }
+
+  public delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`)
   }
 }

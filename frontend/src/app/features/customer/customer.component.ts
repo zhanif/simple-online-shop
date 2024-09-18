@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { CustomerService } from "../../services/customer.service";
-import { CommonModule } from "@angular/common";
 import { PaginationInfo } from "../../shared/models/pagination-info.model";
+import { CommonModule } from "@angular/common";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faEye, faTrashCan, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { ModalCreateCustomerComponent } from "./modal-create-customer/modal-create-customer.component";
+import { ModalViewCustomerComponent } from "./modal-view-customer/modal-view-customer.component";
 
 @Component({
   selector: 'app-customer',
@@ -12,7 +14,9 @@ import { faEye, faTrashCan, faPenToSquare } from "@fortawesome/free-regular-svg-
   styleUrl: './customer.component.css',
   imports: [
     CommonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ModalViewCustomerComponent,
+    ModalCreateCustomerComponent
   ]
 })
 export class CustomerComponent implements OnInit {
@@ -27,21 +31,35 @@ export class CustomerComponent implements OnInit {
   faTrashCan = faTrashCan
   faPenToSquare = faPenToSquare
 
+  selectedCustomerId: number = 0
+  isModalViewOpen = false
+  isModalCreateOpen = false
+
   constructor (
     private customerService: CustomerService
   ) {}
-  ngOnInit(): void {
-    this.getAll(0)
-  }
 
-  private getAll(page: number) {
+  ngOnInit(): void { this.getAll() }
+  goToPage(page: number) { this.getAll(page - 1) }
+  openModalView(id: number) {
+    this.selectedCustomerId = id
+    this.isModalViewOpen = true
+  }
+  openModalCreate() { this.isModalCreateOpen = true }
+  closeModalCreate = () => { this.isModalCreateOpen = false }
+  closeModalView = () => { this.isModalViewOpen = false }
+
+  private getAll(page: number = 0) {
     this.customerService.getAll(page).subscribe(data => {
       this.customers = data.data
       this.meta = data.meta
     })
   }
 
-  goToPage(page: number) {
-    this.getAll(page - 1)
+  refresh = () => {
+    this.closeModalView()
+    this.closeModalCreate()
+
+    this.getAll()
   }
 }

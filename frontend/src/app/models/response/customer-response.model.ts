@@ -6,4 +6,6 @@ export interface CustomerResponse {
   phone: string,
   isActive: boolean,
   pic?: string
+  createdTime: Date
+  lastModifiedTime: Date
 }

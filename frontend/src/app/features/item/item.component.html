@@ -1,53 +1,42 @@
-<app-modal-view *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedCustomerId"/>
-<app-modal-create *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh"/>
-
-<main class="flex justify-center">
-  <div class="w-4/5 text-gray-800 pt-28">
+<main class="flex justify-center text-gray-800 mt-28 mb-10">
+  <div class="w-4/5">
+    <!-- Header -->
     <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-semibold">Customer</h1>
-      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Customer</a>
+      <h1 class="text-3xl font-semibold">Item</h1>
+      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out">Add Item</a>
     </div>
 
+    <!-- Table -->
     <div class="overflow-x-auto mt-8">
       <table class="table table-auto w-full">
         <thead class="text-base font-semibold">
           <tr class="border-b border-b-gray-200">
-            <td class="w-1/12">Avatar</td>
             <td class="w-3/12">Name</td>
             <td class="w-2/12">Code</td>
-            <td class="w-2/12">Phone</td>
+            <td class="w-2/12">Price</td>
+            <td class="w-2/12">Total Stock</td>
             <td class="w-2/12">Status</td>
             <td class="w-1/12">Action</td>
           </tr>
         </thead>
         <tbody class="border-b border-b-gray-200 text-gray-600 text-base">
-          <tr *ngFor="let customer of customers">
+          <tr *ngFor="let item of items">
+            <td>{{ item.name }}</td>
+            <td>{{ item.code }}</td>
+            <td>{{ currencyFormat(item.price) }}</td>
+            <td>{{ item.stock }}</td>
             <td>
-              <div *ngIf="customer.pic; then content_pic else content_default_pic"></div>
-              <ng-template #content_pic>
-                <img class="max-w-10 rounded-full" src="{{ customer.pic }}" alt="{{ customer.name }}">
+              <div *ngIf="item.isAvailable; then item_available else item_unavailable"></div>
+              <ng-template #item_available>
+                <span class="text-white text-sm py-1 px-3 rounded-md bg-emerald-500">Available</span>
               </ng-template>
-              <ng-template #content_default_pic>
-                <img class="max-w-10 rounded-full" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="{{ customer.name }}">
+              <ng-template #item_unavailable>
+                <span class="text-white text-sm py-1 px-3 rounded-md bg-red-500">Not Available</span>
               </ng-template>
-            </td>
-            <td>{{ customer.name }}</td>
-            <td>{{ customer.code }}</td>
-            <td>{{ customer.phone }}</td>
-            <td>
-              <span
-                [ngClass]="{
-                  'bg-emerald-500 text-white': customer.isActive,
-                  'bg-gray-200 text-gray-500': !customer.isActive
-                }"
-                class="text-sm py-1 px-3 rounded-md"
-              >
-                {{ customer.isActive ? 'Active' : 'Inactive' }}
-              </span>
             </td>
             <td>
               <div class="flex space-x-2 w-full">
-                <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out" (click)="openModalView(customer.id)">
+                <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out">
                   <fa-icon [icon]="faEye"></fa-icon>
                 </a>
                 <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500">
@@ -62,7 +51,7 @@
         </tbody>
       </table>
     </div>
-
+    
     <div class="flex justify-between items-center mt-4">
       <span class="block text-gray-500 font-sans">
         Showing {{ meta.size > 0 ? meta.number * meta.size + 1 : 0 }} - {{ (meta.number + 1) * meta.size > meta.totalElements ? meta.totalElements : (meta.number + 1) * meta.size }} of {{ meta.totalElements }} Data
@@ -71,16 +60,16 @@
         <!-- Previous Button -->
         <button
           (click)="goToPage(meta.number)"
-          class="px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-100 transition ease-in-out"
+          class="px-4 py-2 border broder-gray-300 hover:bg-gray-100 transition ease-in-out"
           [ngClass]="{'bg-gray-50 text-gray-400 hover:bg-gray-50 border-gray-300': meta.number == 0}"
           [disabled]="meta.number == 0">
           Prev
         </button>
-
+    
         <!-- Next Button -->
         <button
           (click)="goToPage(meta.number + 2)"
-          class="px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-100 transition ease-in-out"
+          class="px-4 py-2 border border-gray-300 hover:bg-gray-100 transition ease-in-out"
           [ngClass]="{'bg-gray-50 text-gray-400 hover:bg-gray-50 border-gray-300': meta.number + 1 == meta.totalPages || meta.totalPages <= 1}"
           [disabled]="meta.number + 1 == meta.totalPages || meta.totalPages <= 1">
           Next
