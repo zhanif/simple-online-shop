@@ -17,15 +17,15 @@
       <div class="">
         <ul class="flex w-full space-x-6 font-medium text-gray-500">
           <li>
-            <a routerLink="/customer" routerLinkActive="text-gray-800">Customer</a>
+            <a routerLink="/customer" [routerLinkActive]="['active']" [ngClass]="{'text-gray-700': isActive('customer')}">Customer</a>
           </li>
           <li>
-            <a routerLink="/item" routerLinkActive="text-gray-800">Item</a>
+            <a routerLink="/item" [routerLinkActive]="['active']" [ngClass]="{'text-gray-700': isActive('item')}">Item</a>
           </li>
           <li>
-            <a routerLink="/order" routerLinkActive="text-gray-800">Order</a>
+            <a routerLink="/order" [routerLinkActive]="['active']" [ngClass]="{'text-gray-700': isActive('order')}">Order</a>
           </li>
-        </ul>
+        </ul>        
       </div>
     </div>
   </div>
