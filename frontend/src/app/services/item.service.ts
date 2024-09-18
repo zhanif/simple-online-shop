@@ -19,15 +19,15 @@ export class ItemService {
     return this.http.get<ListResponse<ItemResponse>>(`${this.apiUrl}?page=${page}&size=${size}`)
   }
 
-  public getId() {
-
+  public get(id: number = 0): Observable<ItemResponse> {
+    return this.http.get<ItemResponse>(`${this.apiUrl}/${id}`)
   }
 
-  public create() {
-
+  public create(request: ItemRequest): Observable<any> {
+    return this.http.post<ItemResponse>(this.apiUrl, request);
   }
 
-  public update(id: number, request: ItemRequest) {
+  public update(id: number, request: ItemRequest): Observable<ItemResponse> {
     return this.http.put<ItemResponse>(`${this.apiUrl}/${id}`, request);
   }
 

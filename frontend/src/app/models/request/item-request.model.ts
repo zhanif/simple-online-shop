@@ -3,5 +3,5 @@ export interface ItemRequest {
   stock: string
   price: string
   isAvailable: string
-  lastReStock: Date
+  lastReStock?: Date
 }

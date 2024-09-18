@@ -36,7 +36,7 @@ export class CustomerComponent implements OnInit {
   faTrashCan = faTrashCan
   faPenToSquare = faPenToSquare
 
-  selectedCustomerId: number = 0
+  selectedId: number = 0
   isModalViewOpen = false
   isModalCreateOpen = false
   isModalUpdateOpen = false
@@ -50,19 +50,19 @@ export class CustomerComponent implements OnInit {
   goToPage(page: number) { this.getAll(page - 1) }
   
   openModalView(id: number) {
-    this.selectedCustomerId = id
+    this.selectedId = id
     this.isModalViewOpen = true
   }
   closeModalView = () => { this.isModalViewOpen = false }
   openModalCreate() { this.isModalCreateOpen = true }
   closeModalCreate = () => { this.isModalCreateOpen = false }
   openModalUpdate(id: number) {
-    this.selectedCustomerId = id
+    this.selectedId = id
     this.isModalUpdateOpen = true
   }
   closeModalUpdate = () => { this.isModalUpdateOpen = false }
   openModalDelete(id: number) {
-    this.selectedCustomerId = id
+    this.selectedId = id
     this.isModalDeleteOpen = true
   }
   closeModalDelete = () => { this.isModalDeleteOpen = false }

@@ -1,4 +1,4 @@
-<div class="fixed inset-0 w-screen h-screen z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center backdrop-blur-sm">
+<div *ngIf="customer" class="fixed inset-0 w-screen h-screen z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center backdrop-blur-sm">
   <div class="bg-white px-6 rounded w-full h-full sm:w-3/5 lg:w-4/12 sm:h-fit max-h-screen overflow-y-auto">
     <div class="flex justify-between items-center border-b border-b-gray-200 py-3">
       <h2 class="text-lg text-gray-800 font-semibold">View Customer Detail</h2>
@@ -21,6 +21,10 @@
         <span class="text-base">{{ customer.name }}</span>
       </div>
       <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Code</label>
+        <span class="text-base">{{ customer.code }}</span>
+      </div>
+      <div class="mt-1">
         <label class="block text-gray-500 text-sm mb-1" for="">Phone</label>
         <span class="text-base">{{ customer.phone }}</span>
       </div>
@@ -34,11 +38,11 @@
       </div>
       <div class="mt-1">
         <label class="block text-gray-500 text-sm mb-1" for="">Created Time</label>
-        <span class="text-base">{{ convertToDate(customer.createdTime) }}</span>
+        <span class="text-base">{{ convertToDateTime(customer.createdTime) }}</span>
       </div>
       <div class="mt-1">
         <label class="block text-gray-500 text-sm mb-1" for="">Last Modified Time</label>
-        <span class="text-base">{{ convertToDate(customer.lastModifiedTime) }}</span>
+        <span class="text-base">{{ convertToDateTime(customer.lastModifiedTime) }}</span>
       </div>
       <!-- <button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="closeModal()">Close</button> -->
     </div>

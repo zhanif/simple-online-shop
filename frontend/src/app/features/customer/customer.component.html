@@ -1,7 +1,7 @@
-<app-modal-view-customer *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedCustomerId"/>
+<app-modal-view-customer *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedId"/>
 <app-modal-create-customer *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh"/>
-<app-modal-update-customer *ngIf="isModalUpdateOpen" [closeModalUpdate]="closeModalUpdate" [refresh]="refresh" [id]="selectedCustomerId"/>
-<app-modal-delete-customer *ngIf="isModalDeleteOpen" [closeModalDelete]="closeModalDelete" [refresh]="refresh" [id]="selectedCustomerId"/>
+<app-modal-update-customer *ngIf="isModalUpdateOpen" [closeModalUpdate]="closeModalUpdate" [refresh]="refresh" [id]="selectedId"/>
+<app-modal-delete-customer *ngIf="isModalDeleteOpen" [closeModalDelete]="closeModalDelete" [refresh]="refresh" [id]="selectedId"/>
 
 <main class="flex justify-center">
   <div class="w-4/5 text-gray-800 pt-28">

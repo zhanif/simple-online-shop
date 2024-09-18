@@ -54,16 +54,8 @@ export class ModalCreateCustomerComponent {
       if (this.pic) formData.append('pic', this.pic as File)
 
       this.customerService.create(formData).subscribe(
-        (response) => {
-          console.log('Successfully created a new customer');
-          this.refresh()
-        },
-        (error: HttpErrorResponse) => {
-          const message = error.error?.message || 'Unknown error'
-          
-          this.apiErrors = Array.isArray(message) ? message : [message];
-          console.log('Failed to create a new customer');
-        }
+        (response) => { this.refresh() },
+        (error) => { console.error(error) }
       )
     }
 

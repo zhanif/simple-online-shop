@@ -22,7 +22,7 @@ export class ModalDeleteCustomerComponent implements OnInit {
   @Input() closeModalDelete!: () => void
   @Input() refresh!: () => void
   faTrashCan = faTrashCan
-  customer: CustomerResponse | undefined
+  customer: CustomerResponse | any
 
   apiErrors: string[] = []
   pic: File | undefined
@@ -31,33 +31,19 @@ export class ModalDeleteCustomerComponent implements OnInit {
     private customerService: CustomerService
   ) {}
 
-  ngOnInit(): void {
-    this.get()
-  }
+  ngOnInit(): void { this.get() }
 
   onSubmit() {
     this.customerService.delete(this.id).subscribe(
-      (response) => {
-        console.log(`Successfully deleted user`);
-        this.refresh()
-      },
-      (error: HttpErrorResponse) => {
-        const message = error.error?.message || 'Unknown error'
-        
-        this.apiErrors = Array.isArray(message) ? message : [message];
-        console.error(`Failed to delete the customer: ${error}`);
-      }
+      (response) => { this.refresh() },
+      (error) => { console.error(error) }
     )
   }
 
   private get() {
     this.customerService.get(this.id).subscribe(
-      (response) => {
-        this.customer = response
-      },
-      (error) => {
-        console.error(`Failed to get user data`);
-      }
+      (response) => { this.customer = response },
+      (error) => { console.error(error) }
     )
   }
 }

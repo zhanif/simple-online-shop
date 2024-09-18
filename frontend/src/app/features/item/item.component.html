@@ -1,12 +1,15 @@
-<main class="flex justify-center text-gray-800 mt-28 mb-10">
-  <div class="w-4/5">
-    <!-- Header -->
+<app-modal-view-item *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedId" />
+<app-modal-create-item *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh" />
+<app-modal-update-item *ngIf="isModalUpdateOpen" [closeModalUpdate]="closeModalUpdate" [refresh]="refresh" [id]="selectedId" />
+<app-modal-delete-item *ngIf="isModalDeleteOpen" [closeModalDelete]="closeModalDelete" [refresh]="refresh" [id]="selectedId" />
+
+<main class="flex justify-center">
+  <div class="w-4/5 text-gray-800 pt-28">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-semibold">Item</h1>
-      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out">Add Item</a>
+      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Item</a>
     </div>
 
-    <!-- Table -->
     <div class="overflow-x-auto mt-8">
       <table class="table table-auto w-full">
         <thead class="text-base font-semibold">
@@ -23,26 +26,28 @@
           <tr *ngFor="let item of items">
             <td>{{ item.name }}</td>
             <td>{{ item.code }}</td>
-            <td>{{ currencyFormat(item.price) }}</td>
+            <td>{{ convertToCurrency(item.price) }}</td>
             <td>{{ item.stock }}</td>
             <td>
-              <div *ngIf="item.isAvailable; then item_available else item_unavailable"></div>
-              <ng-template #item_available>
-                <span class="text-white text-sm py-1 px-3 rounded-md bg-emerald-500">Available</span>
-              </ng-template>
-              <ng-template #item_unavailable>
-                <span class="text-white text-sm py-1 px-3 rounded-md bg-red-500">Not Available</span>
-              </ng-template>
+              <span
+                [ngClass]="{
+                  'bg-emerald-500 text-white': item.isAvailable,
+                  'bg-gray-200 text-gray-500': !item.isAvailable
+                }"
+                class="text-sm py-1 px-3 rounded-md"
+              >
+                {{ item.isAvailable ? 'Available' : 'Unavailable' }}
+              </span>
             </td>
             <td>
               <div class="flex space-x-2 w-full">
-                <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out">
+                <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out" (click)="openModalView(item.id)">
                   <fa-icon [icon]="faEye"></fa-icon>
                 </a>
-                <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500">
+                <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500" (click)="openModalUpdate(item.id)">
                   <fa-icon [icon]="faPenToSquare"></fa-icon>
                 </a>
-                <a class="inline-block px-3 py-1.5 bg-red-500 text-white cursor-pointer hover:bg-red-600">
+                <a class="inline-block px-3 py-1.5 bg-red-500 text-white cursor-pointer hover:bg-red-600" (click)="openModalDelete(item.id)">
                   <fa-icon [icon]="faTrashCan"></fa-icon>
                 </a>
               </div>

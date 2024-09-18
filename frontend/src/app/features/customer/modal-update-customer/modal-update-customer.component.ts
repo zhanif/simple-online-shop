@@ -6,6 +6,7 @@ import { AlertErrorComponent } from "../../../shared/components/alert-error/aler
 import { CustomerService } from '../../../services/customer.service';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CustomerResponse } from '../../../models/response/customer-response.model';
 
 @Component({
   selector: 'app-modal-update-customer',
@@ -27,6 +28,7 @@ export class ModalUpdateCustomerComponent implements OnInit {
   apiErrors: string[] = []
   form: FormGroup
   pic: File | undefined
+  customer: CustomerResponse | any
 
   constructor(
     private customerService: CustomerService,
@@ -40,9 +42,7 @@ export class ModalUpdateCustomerComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-    this.get()
-  }
+  ngOnInit(): void { this.get() }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0]
@@ -59,33 +59,24 @@ export class ModalUpdateCustomerComponent implements OnInit {
       if (this.pic) formData.append('pic', this.pic as File)
 
       this.customerService.update(this.id, formData).subscribe(
-        (response) => {
-          console.log('Successfully updated the customer');
-          this.refresh()
-        },
-        (error: HttpErrorResponse) => {
-          const message = error.error?.message || 'Unknown error'
-          
-          this.apiErrors = Array.isArray(message) ? message : [message];
-          console.error(`Failed to update the customer: ${error}`);
-        }
+        (response) => { this.refresh() },
+        (error) => { console.error(error) }
       )
     }
   }
 
   private get() {
     this.customerService.get(this.id).subscribe(
-      (data) => {
+      (response: CustomerResponse) => {
+        this.customer = response
         this.form.patchValue({
-          name: data.name,
-          phone: data.phone,
-          address: data.address,
-          isActive: data.isActive
+          name: response.name,
+          phone: response.phone,
+          address: response.address,
+          isActive: response.isActive
         })
       },
-      (error) => {
-        console.error(`Failed to set default value for customer: ${error}`);
-      }
+      (error) => { console.error(error) }
     )
   }
 }
