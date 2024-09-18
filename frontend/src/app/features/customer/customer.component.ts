@@ -6,6 +6,9 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faEye, faTrashCan, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { ModalCreateCustomerComponent } from "./modal-create-customer/modal-create-customer.component";
 import { ModalViewCustomerComponent } from "./modal-view-customer/modal-view-customer.component";
+import { ModalUpdateCustomerComponent } from "./modal-update-customer/modal-update-customer.component";
+import { CustomerResponse } from "../../models/response/customer-response.model";
+import { ModalDeleteCustomerComponent } from "./modal-delete-customer/modal-delete-customer.component";
 
 @Component({
   selector: 'app-customer',
@@ -16,11 +19,13 @@ import { ModalViewCustomerComponent } from "./modal-view-customer/modal-view-cus
     CommonModule,
     FontAwesomeModule,
     ModalViewCustomerComponent,
-    ModalCreateCustomerComponent
+    ModalCreateCustomerComponent,
+    ModalUpdateCustomerComponent,
+    ModalDeleteCustomerComponent
   ]
 })
 export class CustomerComponent implements OnInit {
-  customers: any[] = [];
+  customers: Array<CustomerResponse> = [];
   meta: PaginationInfo = {
     number: 0,
     size: 0,
@@ -34,6 +39,8 @@ export class CustomerComponent implements OnInit {
   selectedCustomerId: number = 0
   isModalViewOpen = false
   isModalCreateOpen = false
+  isModalUpdateOpen = false
+  isModalDeleteOpen = false
 
   constructor (
     private customerService: CustomerService
@@ -41,13 +48,24 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit(): void { this.getAll() }
   goToPage(page: number) { this.getAll(page - 1) }
+  
   openModalView(id: number) {
     this.selectedCustomerId = id
     this.isModalViewOpen = true
   }
+  closeModalView = () => { this.isModalViewOpen = false }
   openModalCreate() { this.isModalCreateOpen = true }
   closeModalCreate = () => { this.isModalCreateOpen = false }
-  closeModalView = () => { this.isModalViewOpen = false }
+  openModalUpdate(id: number) {
+    this.selectedCustomerId = id
+    this.isModalUpdateOpen = true
+  }
+  closeModalUpdate = () => { this.isModalUpdateOpen = false }
+  openModalDelete(id: number) {
+    this.selectedCustomerId = id
+    this.isModalDeleteOpen = true
+  }
+  closeModalDelete = () => { this.isModalDeleteOpen = false }
 
   private getAll(page: number = 0) {
     this.customerService.getAll(page).subscribe(data => {
@@ -59,6 +77,8 @@ export class CustomerComponent implements OnInit {
   refresh = () => {
     this.closeModalView()
     this.closeModalCreate()
+    this.closeModalUpdate()
+    this.closeModalDelete()
 
     this.getAll()
   }

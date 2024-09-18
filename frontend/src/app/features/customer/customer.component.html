@@ -1,5 +1,7 @@
-<app-modal-view *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedCustomerId"/>
-<app-modal-create *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh"/>
+<app-modal-view-customer *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedCustomerId"/>
+<app-modal-create-customer *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh"/>
+<app-modal-update-customer *ngIf="isModalUpdateOpen" [closeModalUpdate]="closeModalUpdate" [refresh]="refresh" [id]="selectedCustomerId"/>
+<app-modal-delete-customer *ngIf="isModalDeleteOpen" [closeModalDelete]="closeModalDelete" [refresh]="refresh" [id]="selectedCustomerId"/>
 
 <main class="flex justify-center">
   <div class="w-4/5 text-gray-800 pt-28">
@@ -50,10 +52,10 @@
                 <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out" (click)="openModalView(customer.id)">
                   <fa-icon [icon]="faEye"></fa-icon>
                 </a>
-                <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500">
+                <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500" (click)="openModalUpdate(customer.id)">
                   <fa-icon [icon]="faPenToSquare"></fa-icon>
                 </a>
-                <a class="inline-block px-3 py-1.5 bg-red-500 text-white cursor-pointer hover:bg-red-600">
+                <a class="inline-block px-3 py-1.5 bg-red-500 text-white cursor-pointer hover:bg-red-600" (click)="openModalDelete(customer.id)">
                   <fa-icon [icon]="faTrashCan"></fa-icon>
                 </a>
               </div>

@@ -10,30 +10,34 @@
       <div class="mt-4 flex items-center justify-center">
         <div *ngIf="customer.pic; then content_pic else content_default_pic" class="w-full"></div>
         <ng-template #content_pic>
-          <img class="w-28 rounded-full" src="{{ customer.pic }}" alt="{{ customer.name }}">
+          <img class="w-24 rounded-full" src="{{ customer.pic }}" alt="{{ customer.name }}">
         </ng-template>
         <ng-template #content_default_pic>
-          <img class="w-28 rounded-full" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="{{ customer.name }}">
+          <img class="w-24 rounded-full" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="{{ customer.name }}">
         </ng-template>
       </div>
-      <div class="mt-2">
-        <label class="block text-gray-500 text-sm mb-2" for="">Name</label>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Name</label>
         <span class="text-base">{{ customer.name }}</span>
       </div>
-      <div class="mt-2">
-        <label class="block text-gray-500 text-sm mb-2" for="">Phone</label>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Phone</label>
         <span class="text-base">{{ customer.phone }}</span>
       </div>
-      <div class="mt-2">
-        <label class="block text-gray-500 text-sm mb-2" for="">Address</label>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Address</label>
         <span class="text-base">{{ customer.address }}</span>
       </div>
-      <div class="mt-2">
-        <label class="block text-gray-500 text-sm mb-2" for="">Created Time</label>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Status</label>
+        <span class="text-base">{{ customer.isActive ? 'Active' : 'Inactive' }}</span>
+      </div>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Created Time</label>
         <span class="text-base">{{ convertToDate(customer.createdTime) }}</span>
       </div>
-      <div class="mt-2">
-        <label class="block text-gray-500 text-sm mb-2" for="">Last Modified Time</label>
+      <div class="mt-1">
+        <label class="block text-gray-500 text-sm mb-1" for="">Last Modified Time</label>
         <span class="text-base">{{ convertToDate(customer.lastModifiedTime) }}</span>
       </div>
       <!-- <button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="closeModal()">Close</button> -->

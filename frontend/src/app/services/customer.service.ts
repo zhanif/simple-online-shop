@@ -27,7 +27,7 @@ export class CustomerService {
     return this.http.post(this.apiUrl, request)
   }
 
-  public update(id: number, request: CustomerRequest): Observable<CustomerResponse> {
+  public update(id: number, request: CustomerRequest | FormData): Observable<CustomerResponse> {
     return this.http.put<CustomerResponse>(`${this.apiUrl}/${id}`, request)
   }
 

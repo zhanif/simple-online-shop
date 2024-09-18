@@ -1,5 +1,5 @@
 export interface CustomerResponse {
-  id: string
+  id: number
   name: string,
   address: string,
   code: string,

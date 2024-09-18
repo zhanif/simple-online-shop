@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSave } from '@fortawesome/free-regular-svg-icons';
@@ -8,18 +8,19 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-modal-create-customer',
+  selector: 'app-modal-update-customer',
   standalone: true,
   imports: [
     FontAwesomeModule,
     AlertErrorComponent,
     ReactiveFormsModule,
     CommonModule
-],
-  templateUrl: './modal-create-customer.component.html'
+  ],
+  templateUrl: './modal-update-customer.component.html'
 })
-export class ModalCreateCustomerComponent {
-  @Input() closeModalCreate!: () => void
+export class ModalUpdateCustomerComponent implements OnInit {
+  @Input() id!: number
+  @Input() closeModalUpdate!: () => void
   @Input() refresh!: () => void
   faSave = faSave
 
@@ -39,6 +40,10 @@ export class ModalCreateCustomerComponent {
     })
   }
 
+  ngOnInit(): void {
+    this.get()
+  }
+
   onFileSelected(event: any) {
     const file: File = event.target.files[0]
     this.pic = file ? file : undefined
@@ -53,19 +58,34 @@ export class ModalCreateCustomerComponent {
       formData.append('isActive', this.form.get('isActive')?.value)
       if (this.pic) formData.append('pic', this.pic as File)
 
-      this.customerService.create(formData).subscribe(
+      this.customerService.update(this.id, formData).subscribe(
         (response) => {
-          console.log('Successfully created a new customer');
+          console.log('Successfully updated the customer');
           this.refresh()
         },
         (error: HttpErrorResponse) => {
           const message = error.error?.message || 'Unknown error'
           
           this.apiErrors = Array.isArray(message) ? message : [message];
-          console.log('Failed to create a new customer');
+          console.error(`Failed to update the customer: ${error}`);
         }
       )
     }
+  }
 
+  private get() {
+    this.customerService.get(this.id).subscribe(
+      (data) => {
+        this.form.patchValue({
+          name: data.name,
+          phone: data.phone,
+          address: data.address,
+          isActive: data.isActive
+        })
+      },
+      (error) => {
+        console.error(`Failed to set default value for customer: ${error}`);
+      }
+    )
   }
 }

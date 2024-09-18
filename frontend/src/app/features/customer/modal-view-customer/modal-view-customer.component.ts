@@ -5,13 +5,12 @@ import { convertToDate } from '../../../core/utility';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-modal-view',
+  selector: 'app-modal-view-customer',
   standalone: true,
   imports: [
     CommonModule
   ],
-  templateUrl: './modal-view-customer.component.html',
-  styleUrl: './modal-view-customer.component.css'
+  templateUrl: './modal-view-customer.component.html'
 })
 export class ModalViewCustomerComponent implements OnInit {
   @Input() id!: number
