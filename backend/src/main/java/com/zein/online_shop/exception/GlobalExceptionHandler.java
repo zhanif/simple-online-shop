@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,13 +71,22 @@ public class GlobalExceptionHandler {
         else if (e instanceof HttpMessageNotReadableException) {
             message = "Bad request message";
         }
+//        else if (e instanceof MethodArgumentNotValidException) {
+//            var errors = new HashMap<String, List<String>>();
+//
+//            for (ObjectError error : ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()) {
+//                FieldError fieldError = (FieldError) error;
+//                String field = fieldError.getField();
+//                errors.computeIfAbsent(field, k -> new ArrayList<>()).add(error.getDefaultMessage());
+//            }
+//
+//            message = errors;
+//        }
         else if (e instanceof MethodArgumentNotValidException) {
-            var errors = new HashMap<String, List<String>>();
-
-            for (ObjectError error : ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()) {
+            var errors = new ArrayList<>();
+            for (ObjectError error: ((MethodArgumentNotValidException)e).getBindingResult().getAllErrors()) {
                 FieldError fieldError = (FieldError) error;
-                String field = fieldError.getField();
-                errors.computeIfAbsent(field, k -> new ArrayList<>()).add(error.getDefaultMessage());
+                errors.add(error.getDefaultMessage());
             }
 
             message = errors;

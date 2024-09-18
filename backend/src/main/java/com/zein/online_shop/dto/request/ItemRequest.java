@@ -13,15 +13,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemRequest {
-    @NotBlank
+    @NotBlank(message = "Name must be filed")
     private String name;
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Stock must be filled")
+    @Min(value = 0, message = "Stock must not be negative")
     private Integer stock;
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Price must be filled")
+    @Min(value = 0, message = "Price must not be negative")
     private Integer price;
-    @NotNull
+    @NotNull(message = "Availability status must be provided")
     private Boolean isAvailable;
     private Date lastReStock;
 }

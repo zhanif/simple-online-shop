@@ -12,9 +12,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateOrderRequest {
-    @NotNull
+    @NotNull(message = "Date must be filled")
     private Date date;
-    @NotNull
-    @Min(1)
+    @NotNull(message = "Quantity must be filled")
+    @Min(value = 1, message = "Quantity must be positive")
     private Integer quantity;
 }

@@ -102,8 +102,16 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         customer.setIsActive(request.getIsActive());
 
         if (request.getPic() != null && !request.getPic().isEmpty()) {
-            minioService.remove(MINIO_BUCKET, customer.getPic());
-
+            try {
+                if (customer.getPic() != null && !customer.getPic().isEmpty()) {
+                    minioService.remove(MINIO_BUCKET, customer.getPic());
+                    redisService.delete(REDIS_CACHE_PREFIX + customer.getId());
+                }
+            }
+            catch (Exception e) {
+                var msg = String.format("Ignored Exception: %s", e.getMessage());
+                System.out.println(msg);
+            }
             var uploaded = minioService.upload(request.getPic(), MINIO_BUCKET);
             customer.setPic(uploaded.getFileName());
         }
@@ -117,7 +125,15 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         Customer customer = customerRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Customer (ID: " + id + ") not found"));
 
-        minioService.remove(MINIO_BUCKET, customer.getPic());
+        try {
+            minioService.remove(MINIO_BUCKET, customer.getPic());
+            redisService.delete(REDIS_CACHE_PREFIX + customer.getId());
+        }
+        catch (Exception e) {
+            var msg = String.format("Ignored Exception: %s", e.getMessage());
+            System.out.println(msg);
+        }
+
         customerRepository.deleteById(id);
     }
 

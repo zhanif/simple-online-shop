@@ -11,13 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerRequest {
-    @NotBlank
+    @NotBlank(message = "Name must be filled")
     private String name;
-    @NotBlank
+    @NotBlank(message = "Address must be filled")
     private String address;
-    @NotBlank
+    @NotBlank(message = "Phone number must be filled")
     private String phone;
-    @NotNull
+    @NotNull(message = "Active status must be provided")
     private Boolean isActive;
     private MultipartFile pic;
 }

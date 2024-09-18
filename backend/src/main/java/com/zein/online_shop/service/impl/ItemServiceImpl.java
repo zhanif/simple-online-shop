@@ -47,6 +47,8 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
     public ItemResponse create(ItemRequest request) {
         Item item = modelMapper.map(request, Item.class);
 
+        if (item.getLastReStock() == null) item.setLastReStock(new Date());
+
         int maxLoop = 5;
         while(maxLoop > 0) {
             // generating custom 6-digit code

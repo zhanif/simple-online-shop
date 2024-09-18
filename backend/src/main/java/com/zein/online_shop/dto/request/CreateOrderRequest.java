@@ -14,14 +14,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderRequest {
-    @NotBlank
+    @NotBlank(message = "Customer must be specified")
     private Integer customerId;
-    @NotBlank
+    @NotBlank(message = "Item must be specified")
     private Integer itemId;
-    @NotBlank
-    @Min(1)
+    @NotBlank(message = "Quantity must be filled")
+    @Min(value = 1, message = "Quantity must be positive")
     private Integer quantity;
-    @NotNull
+    @NotNull(message = "Date must be filled")
     @DateTimeFormat(pattern = "YYYY-mm-dd")
     private Date date;
 }
