@@ -49,9 +49,8 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("{id}/download")
-    public ResponseEntity<?> download(@PathVariable Integer id) {
-        byte[] data = null;
-        return ResponseEntity.ok(data);
+    @GetMapping("/export")
+    public ResponseEntity<?> export() {
+        return ResponseEntity.ok(orderService.export());
     }
 }

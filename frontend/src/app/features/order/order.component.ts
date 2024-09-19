@@ -86,4 +86,19 @@ export class OrderComponent implements OnInit {
 
     this.getAll()
   }
+
+  export() {
+    this.orderService.export().subscribe(
+      (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob)
+        const anchor = document.createElement('a')
+        anchor.href = url
+        anchor.download = this.convertToDate(new Date().getTime()) + '_order-report.pdf'
+        anchor.click()
+
+        window.URL.revokeObjectURL(url)
+      },
+      (error) => { console.error(error) }
+    )
+  }
 }

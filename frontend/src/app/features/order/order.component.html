@@ -7,7 +7,10 @@
   <div class="w-4/5 text-gray-800 pt-28">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-semibold">Order</h1>
-      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Order</a>
+      <div class="space-x-2">
+        <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="export()">Export PDF</a>
+        <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Order</a>
+      </div>
     </div>
 
     <div class="overflow-x-auto mt-8">

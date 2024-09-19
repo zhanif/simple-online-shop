@@ -4,7 +4,6 @@ import com.zein.online_shop.dto.request.CreateOrderRequest;
 import com.zein.online_shop.dto.request.UpdateOrderRequest;
 import com.zein.online_shop.dto.response.ListResponse;
 import com.zein.online_shop.dto.response.OrderResponse;
-import org.apache.coyote.BadRequestException;
 
 import java.util.List;
 
@@ -14,4 +13,5 @@ public interface OrderService {
     OrderResponse create(CreateOrderRequest request);
     OrderResponse update(Integer id, UpdateOrderRequest request);
     void delete(Integer id);
+    byte[] export();
 }

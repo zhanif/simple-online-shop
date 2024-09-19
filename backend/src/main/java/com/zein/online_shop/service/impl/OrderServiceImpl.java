@@ -15,6 +15,8 @@ import com.zein.online_shop.service.OrderService;
 import com.zein.online_shop.utility.UniqueCodeGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,9 +24,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -107,5 +115,44 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     @Override
     public void delete(Integer id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public byte[] export() {
+        List<Order> orders = orderRepository.findAll();
+        byte[] data;
+        try {
+            InputStream template = getClass().getResourceAsStream("/reports/simple-online-shop.jrxml");
+            if (template == null) throw new FileNotFoundException("Template not found");
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(template);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/YYYY");
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+            currencyFormat.setMaximumFractionDigits(0);
+
+            var collectionDataSource = orders.stream()
+                .map(order -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("date", dateFormat.format(order.getDate()));
+                    map.put("code", order.getCode());
+                    map.put("quantity", order.getQuantity());
+                    map.put("total_price", currencyFormat.format(order.getTotalPrice()));
+                    map.put("customer_name", order.getCustomer().getName());
+                    map.put("item_name", order.getItem().getName());
+
+                    return map;
+                }).collect(Collectors.toList());
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(collectionDataSource);
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("image", ClassLoader.getSystemResource("reports/leaf_banner_gray.png").getPath());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
+
+            data = JasperExportManager.exportReportToPdf(jasperPrint);
+        } catch (FileNotFoundException | JRException e) {
+            throw new RuntimeException(e);
+        }
+
+        return data;
     }
 }

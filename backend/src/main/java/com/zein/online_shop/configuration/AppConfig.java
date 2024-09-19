@@ -1,7 +1,5 @@
 package com.zein.online_shop.configuration;
 
-import com.zein.online_shop.dto.response.CustomerResponse;
-import com.zein.online_shop.dto.response.ItemResponse;
 import com.zein.online_shop.dto.response.OrderResponse;
 import com.zein.online_shop.dto.response.SearchOptionResponse;
 import com.zein.online_shop.model.Customer;
@@ -25,9 +23,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
+import java.util.Map;
 
 @Slf4j
 @Configuration

@@ -3,47 +3,27 @@
     <property name="ireport.zoom" value="1.0"/>
     <property name="ireport.x" value="0"/>
     <property name="ireport.y" value="0"/>
-    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+    <parameter name="image" class="java.lang.String" />
     <style name="Title" fontName="Arial" fontSize="26.0" bold="true"/>
     <style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18.0"/>
     <style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12.0" bold="true"/>
     <style name="Detail" fontName="Arial" fontSize="12.0"/>
-    <query language="SQL"><![CDATA[select * from orders;]]></query>
-    <field name="date" class="java.sql.Date">
-        <property name="com.jaspersoft.studio.field.name" value="date"/>
-        <property name="com.jaspersoft.studio.field.label" value="date"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
+    <field name="date" class="java.lang.String">
     </field>
     <field name="code" class="java.lang.String">
-        <property name="com.jaspersoft.studio.field.name" value="code"/>
-        <property name="com.jaspersoft.studio.field.label" value="code"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
     </field>
-    <field name="customer_id" class="java.lang.Integer">
-        <property name="com.jaspersoft.studio.field.name" value="customer_id"/>
-        <property name="com.jaspersoft.studio.field.label" value="customer_id"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
+    <field name="customer_name" class="java.lang.String">
     </field>
-    <field name="item_id" class="java.lang.Integer">
-        <property name="com.jaspersoft.studio.field.name" value="item_id"/>
-        <property name="com.jaspersoft.studio.field.label" value="item_id"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
+    <field name="item_name" class="java.lang.String">
     </field>
     <field name="quantity" class="java.lang.Integer">
-        <property name="com.jaspersoft.studio.field.name" value="quantity"/>
-        <property name="com.jaspersoft.studio.field.label" value="quantity"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
     </field>
-    <field name="total_price" class="java.lang.Integer">
-        <property name="com.jaspersoft.studio.field.name" value="total_price"/>
-        <property name="com.jaspersoft.studio.field.label" value="total_price"/>
-        <property name="com.jaspersoft.studio.field.tree.path" value="orders"/>
+    <field name="total_price" class="java.lang.String">
     </field>
     <background splitType="Stretch"/>
     <title height="72" splitType="Stretch">
         <element kind="image" uuid="363fa2ad-70fc-43cb-9062-e6c62c7f48fc" x="275" y="0" width="300" height="64">
-            <expression><![CDATA["leaf_banner_gray.png"]]></expression>
+            <expression><![CDATA[$P{image}]]></expression>
         </element>
         <element kind="staticText" uuid="6f9c1004-6140-4588-9c4f-d75824835765" x="0" y="13" width="263" height="33" vTextAlign="Middle" style="Title">
             <text><![CDATA[Simple Online Shop]]></text>
@@ -55,27 +35,27 @@
             <pen lineWidth="0.5" lineColor="#999999"/>
         </element>
         <element kind="staticText" uuid="151c5f7c-d48a-4220-9dad-bcc380b66308" x="0" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[date]]></text>
+            <text><![CDATA[Date]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="11ae9f07-53f7-4977-b4cf-b35f4c5ab733"/>
         </element>
         <element kind="staticText" uuid="71be06a0-808e-487a-ab9a-d5dadd20340f" x="92" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[code]]></text>
+            <text><![CDATA[Code]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="af98114e-f7fa-4967-88e9-19f99fd6b02d"/>
         </element>
         <element kind="staticText" uuid="ecdf82d7-3497-4dc0-a2ca-7a5f4d84aa7b" x="184" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[customer_id]]></text>
+            <text><![CDATA[Customer]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="357a027e-d530-4ce0-a564-0bc179fb3079"/>
         </element>
         <element kind="staticText" uuid="07739d78-0b9f-47a6-8088-0d699238462d" x="276" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[item_id]]></text>
+            <text><![CDATA[Item]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5a7a587e-dbac-46e6-9ae7-738955503232"/>
         </element>
         <element kind="staticText" uuid="a7de3e06-f0f3-468e-8eea-1225daac908d" x="368" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[quantity]]></text>
+            <text><![CDATA[Qty]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="70f757ba-342f-47e4-acf3-bd4203980b34"/>
         </element>
         <element kind="staticText" uuid="24d9ccb4-3e5f-42c9-9389-bb20c8fa7d1e" x="460" y="19" width="92" height="15" style="Column header">
-            <text><![CDATA[total_price]]></text>
+            <text><![CDATA[Total Price]]></text>
             <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e779e663-12a6-40a2-8cfa-993e69f52496"/>
         </element>
     </columnHeader>
@@ -93,11 +73,11 @@
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="af98114e-f7fa-4967-88e9-19f99fd6b02d"/>
             </element>
             <element kind="textField" uuid="dae2eae3-bccc-407d-9732-e7851683c356" x="184" y="0" width="92" height="15" style="Detail">
-                <expression><![CDATA[$F{customer_id}]]></expression>
+                <expression><![CDATA[$F{customer_name}]]></expression>
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="357a027e-d530-4ce0-a564-0bc179fb3079"/>
             </element>
             <element kind="textField" uuid="b838f300-0dbc-4967-9153-8c8efec9055d" x="276" y="0" width="92" height="15" style="Detail">
-                <expression><![CDATA[$F{item_id}]]></expression>
+                <expression><![CDATA[$F{item_name}]]></expression>
                 <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5a7a587e-dbac-46e6-9ae7-738955503232"/>
             </element>
             <element kind="textField" uuid="3c2a4212-edc6-46b4-96a0-9d9362504409" x="368" y="0" width="92" height="15" style="Detail">
