@@ -3,6 +3,7 @@ package com.zein.online_shop.service.impl;
 import com.zein.online_shop.dto.request.CustomerRequest;
 import com.zein.online_shop.dto.response.ListResponse;
 import com.zein.online_shop.dto.response.CustomerResponse;
+import com.zein.online_shop.dto.response.SearchOptionResponse;
 import com.zein.online_shop.model.Customer;
 import com.zein.online_shop.repository.CustomerRepository;
 import com.zein.online_shop.service.CustomerService;
@@ -21,11 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -155,5 +154,20 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
         }
 
         return response;
+    }
+
+    @Override
+    public List<SearchOptionResponse> search(String search) {
+        List<Customer> customers;
+
+        if (search != null) {
+            customers = customerRepository.findByNameContainingIgnoreCaseAndIsActive(search, true);
+        }
+        else {
+            List<String> sorts = List.of("name,asc");
+            customers = customerRepository.findAllBy(PageRequest.of(0, 10, Sort.by(getSortOrder(sorts)))).toList();
+        }
+
+        return Arrays.asList(modelMapper.map(customers, SearchOptionResponse[].class));
     }
 }

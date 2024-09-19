@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { faSave } from '@fortawesome/free-regular-svg-icons';
 import { ItemService } from '../../../services/item.service';
 import { ItemRequest } from '../../../models/request/item-request.model';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-modal-create-item',
@@ -33,8 +32,8 @@ export class ModalCreateItemComponent {
   ) {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
-      price: ['', Validators.required],
-      stock: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      stock: ['', [Validators.required, Validators.min(0)]],
       isAvailable: [false, Validators.required],
       lastReStock: [null]
     })
@@ -54,7 +53,10 @@ export class ModalCreateItemComponent {
 
       this.itemService.create(itemRequest).subscribe(
         (response) => { this.refresh() },
-        (error) => { console.error(error) }
+        (error) => { 
+          const message = error.error?.message || 'Unknown error'
+          this.apiErrors = Array.isArray(message) ? message : [message];
+        }
       )
     }
   }

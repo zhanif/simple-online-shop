@@ -36,8 +36,8 @@ export class ModalUpdateItemComponent implements OnInit {
   ) {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
-      stock: ['', Validators.required],
-      price: ['', Validators.required],
+      stock: ['', [Validators.required, Validators.min(0)]],
+      price: ['', [Validators.required, Validators.min(0)]],
       isAvailable: [false, Validators.required],
       lastReStock: [null]
     })
@@ -59,7 +59,10 @@ export class ModalUpdateItemComponent implements OnInit {
 
       this.itemService.update(this.id, itemRequest).subscribe(
         (response) => { this.refresh() },
-        (error) => { console.error(error) }
+        (error) => { 
+          const message = error.error?.message || 'Unknown error'
+          this.apiErrors = Array.isArray(message) ? message : [message];
+        }
       )
     }
   }
@@ -76,7 +79,10 @@ export class ModalUpdateItemComponent implements OnInit {
           isAvailable: response.isAvailable
         })
       },
-      (error) => { console.error(error) }
+      (error) => { 
+        const message = error.error?.message || 'Unknown error'
+        this.apiErrors = Array.isArray(message) ? message : [message];
+      }
     )
   }
 }

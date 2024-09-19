@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ItemResponse } from '../../../models/response/item-response.model';
-import { ItemService } from '../../../services/item.service';
+import { OrderResponse } from '../../../models/response/order-response.model';
+import { OrderService } from '../../../services/order.service';
 import { convertToCurrenct, convertToDateTime } from '../../../core/utility';
 
 @Component({
-  selector: 'app-modal-view-item',
+  selector: 'app-modal-view-order',
   standalone: true,
   imports: [
     CommonModule
   ],
-  templateUrl: './modal-view-item.component.html'
+  templateUrl: './modal-view-order.component.html'
 })
-export class ModalViewItemComponent implements OnInit {
+export class ModalViewOrderComponent implements OnInit {
   @Input() id!: number
   @Input() closeModalView!: () => void
-  item: ItemResponse | any
+  order: OrderResponse | any
 
   constructor(
-    private itemService: ItemService
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void { this.get() }
@@ -27,8 +27,8 @@ export class ModalViewItemComponent implements OnInit {
   convertToCurrency(number: number) { return convertToCurrenct(number) }
 
   get() {
-    this.itemService.get(this.id).subscribe(
-      (response: ItemResponse) => { this.item = response },
+    this.orderService.get(this.id).subscribe(
+      (response: OrderResponse) => { this.order = response },
       (error) => { console.error(error) }
     )
   }

@@ -55,7 +55,10 @@ export class ModalCreateCustomerComponent {
 
       this.customerService.create(formData).subscribe(
         (response) => { this.refresh() },
-        (error) => { console.error(error) }
+        (error) => { 
+          const message = error.error?.message || 'Unknown error'
+          this.apiErrors = Array.isArray(message) ? message : [message];
+        }
       )
     }
 

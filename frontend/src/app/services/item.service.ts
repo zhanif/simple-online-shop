@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ItemRequest } from '../models/request/item-request.model';
 import { ItemResponse } from '../models/response/item-response.model';
 import { ListResponse } from '../models/response/list-response.model';
+import { SearchOptionResponse } from '../models/response/search-option-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ItemService {
   }
 
   public create(request: ItemRequest): Observable<any> {
-    return this.http.post<ItemResponse>(this.apiUrl, request);
+    return this.http.post(this.apiUrl, request);
   }
 
   public update(id: number, request: ItemRequest): Observable<ItemResponse> {
@@ -33,5 +34,9 @@ export class ItemService {
 
   public delete(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  public search(query: string): Observable<Array<SearchOptionResponse>> {
+    return this.http.get<Array<SearchOptionResponse>>(`${this.apiUrl}?search=${query}`)
   }
 }

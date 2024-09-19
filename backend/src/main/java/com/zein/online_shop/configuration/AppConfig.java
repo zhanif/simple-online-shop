@@ -3,6 +3,9 @@ package com.zein.online_shop.configuration;
 import com.zein.online_shop.dto.response.CustomerResponse;
 import com.zein.online_shop.dto.response.ItemResponse;
 import com.zein.online_shop.dto.response.OrderResponse;
+import com.zein.online_shop.dto.response.SearchOptionResponse;
+import com.zein.online_shop.model.Customer;
+import com.zein.online_shop.model.Item;
 import com.zein.online_shop.model.Order;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +69,16 @@ public class AppConfig {
         modelMapper.typeMap(Order.class, OrderResponse.class).addMappings(mapper -> {
            mapper.map(src -> src.getCustomer().getId(), OrderResponse::setCustomerId);
            mapper.map(src -> src.getItem().getId(), OrderResponse::setItemId);
+        });
+
+        modelMapper.typeMap(Customer.class, SearchOptionResponse.class).addMappings(mapper -> {
+            mapper.map(Customer::getId, SearchOptionResponse::setId);
+            mapper.map(Customer::getName, SearchOptionResponse::setValue);
+        });
+
+        modelMapper.typeMap(Item.class, SearchOptionResponse.class).addMappings(mapper -> {
+            mapper.map(Item::getId, SearchOptionResponse::setId);
+            mapper.map(Item::getName, SearchOptionResponse::setValue);
         });
 
         return modelMapper;

@@ -1,0 +1,15 @@
+.ng-select-base {
+  @apply border py-2 px-3.5 w-full outline-none;
+}
+
+.ng-select-base .ng-dropdown-panel {
+  @apply left-0 right-0 bg-white mt-2.5 border-b;
+}
+
+.ng-select-base .ng-dropdown-panel .ng-option {
+  @apply py-2 px-3 border-t border-x;
+}
+
+.ng-select-base .ng-select-container .ng-placeholder {
+  @apply text-gray-400;
+}

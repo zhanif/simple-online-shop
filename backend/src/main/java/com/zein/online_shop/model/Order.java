@@ -2,6 +2,7 @@ package com.zein.online_shop.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,15 +30,15 @@ public class Order {
     private String code;
 
     @Column(columnDefinition = "DATE")
-    @NotBlank
+    @NotNull
     private Date date;
 
     @Column
-    @NotBlank
+    @NotNull
     private Integer totalPrice;
 
     @Column
-    @NotBlank
+    @NotNull
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)

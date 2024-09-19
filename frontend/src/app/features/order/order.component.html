@@ -1,0 +1,73 @@
+<app-modal-view-order *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedId" />
+<app-modal-create-order *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh" />
+
+<main class="flex justify-center">
+  <div class="w-4/5 text-gray-800 pt-28">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-semibold">Order</h1>
+      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Order</a>
+    </div>
+
+    <div class="overflow-x-auto mt-8">
+      <table class="table table-auto w-full">
+        <thead class="text-base font-semibold">
+          <tr class="border-b border-b-gray-200">
+            <td class="w-3/12">Order Date</td>
+            <td class="w-2/12">Code</td>
+            <td class="w-2/12">Customer</td>
+            <td class="w-2/12">Item</td>
+            <td class="w-2/12">Total Price</td>
+            <td class="w-1/12">Action</td>
+          </tr>
+        </thead>
+        <tbody class="border-b border-b-gray-200 text-gray-600 text-base">
+          <tr *ngFor="let order of orders">
+            <td>{{ convertToDate(order.date) }}</td>
+            <td>{{ order.code }}</td>
+            <td>{{ order.customer.name }}</td>
+            <td>{{ order.item.name }}</td>
+            <td>{{ convertToCurrency(order.totalPrice) }}</td>
+            <td>
+              <div class="flex space-x-2 w-full">
+                <a class="inline-block px-2.5 py-1.5 border border-gray-300 text-gray-800 cursor-pointer hover:bg-gray-100 transition ease-in-out" (click)="openModalView(order.id)">
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </a>
+                <a class="inline-block px-3 py-1.5 bg-amber-400 text-white cursor-pointer hover:bg-amber-500" (click)="openModalUpdate(order.id)">
+                  <fa-icon [icon]="faPenToSquare"></fa-icon>
+                </a>
+                <a class="inline-block px-3 py-1.5 bg-red-500 text-white cursor-pointer hover:bg-red-600" (click)="openModalDelete(order.id)">
+                  <fa-icon [icon]="faTrashCan"></fa-icon>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="flex justify-between items-center mt-4">
+      <span class="block text-gray-500 font-sans">
+        Showing {{ meta.size > 0 ? meta.number * meta.size + 1 : 0 }} - {{ (meta.number + 1) * meta.size > meta.totalElements ? meta.totalElements : (meta.number + 1) * meta.size }} of {{ meta.totalElements }} Data
+      </span>
+      <div class="flex space-x-2">
+        <!-- Previous Button -->
+        <button
+          (click)="goToPage(meta.number)"
+          class="px-4 py-2 border broder-gray-300 hover:bg-gray-100 transition ease-in-out"
+          [ngClass]="{'bg-gray-50 text-gray-400 hover:bg-gray-50 border-gray-300': meta.number == 0}"
+          [disabled]="meta.number == 0">
+          Prev
+        </button>
+    
+        <!-- Next Button -->
+        <button
+          (click)="goToPage(meta.number + 2)"
+          class="px-4 py-2 border border-gray-300 hover:bg-gray-100 transition ease-in-out"
+          [ngClass]="{'bg-gray-50 text-gray-400 hover:bg-gray-50 border-gray-300': meta.number + 1 == meta.totalPages || meta.totalPages <= 1}"
+          [disabled]="meta.number + 1 == meta.totalPages || meta.totalPages <= 1">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

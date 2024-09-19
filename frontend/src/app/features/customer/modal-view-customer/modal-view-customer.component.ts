@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
 import { CustomerResponse } from '../../../models/response/customer-response.model';
-import { convertToDateTime } from '../../../core/utility';
 import { CommonModule } from '@angular/common';
+import { convertToDateTime } from '../../../core/utility';
 
 @Component({
   selector: 'app-modal-view-customer',
@@ -22,6 +22,7 @@ export class ModalViewCustomerComponent implements OnInit {
   ) {}
 
   ngOnInit() { this.get() }
+  convertToDate(timestamp: number) { return convertToDateTime(timestamp).split(' ')[0] }
   convertToDateTime(timestamp: number) { return convertToDateTime(timestamp) }
 
   get() {

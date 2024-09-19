@@ -60,7 +60,10 @@ export class ModalUpdateCustomerComponent implements OnInit {
 
       this.customerService.update(this.id, formData).subscribe(
         (response) => { this.refresh() },
-        (error) => { console.error(error) }
+        (error) => { 
+          const message = error.error?.message || 'Unknown error'
+          this.apiErrors = Array.isArray(message) ? message : [message];
+        }
       )
     }
   }
@@ -76,7 +79,10 @@ export class ModalUpdateCustomerComponent implements OnInit {
           isActive: response.isActive
         })
       },
-      (error) => { console.error(error) }
+      (error) => { 
+        const message = error.error?.message || 'Unknown error'
+        this.apiErrors = Array.isArray(message) ? message : [message];
+      }
     )
   }
 }

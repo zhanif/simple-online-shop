@@ -23,9 +23,10 @@ public class ItemController {
     public ResponseEntity<?> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "#{'createdTime,desc'.split('_')}") List<String> sort
+            @RequestParam(defaultValue = "#{'createdTime,desc'.split('_')}") List<String> sort,
+            @RequestParam(required = false) String search
     ) {
-        return ResponseEntity.ok(itemService.getAll(page, size, sort));
+        return ResponseEntity.ok(search == null ? itemService.getAll(page, size, sort) : itemService.search(search));
     }
 
     @GetMapping("{id}")

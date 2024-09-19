@@ -43,7 +43,10 @@ export class ModalDeleteCustomerComponent implements OnInit {
   private get() {
     this.customerService.get(this.id).subscribe(
       (response) => { this.customer = response },
-      (error) => { console.error(error) }
+      (error) => { 
+        const message = error.error?.message || 'Unknown error'
+        this.apiErrors = Array.isArray(message) ? message : [message];
+      }
     )
   }
 }

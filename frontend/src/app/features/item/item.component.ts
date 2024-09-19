@@ -72,9 +72,9 @@ export class ItemComponent implements OnInit {
   closeModalDelete = () => { this.isModalDeleteOpen = false }
 
   private getAll(page: number = 0) {
-    this.itemService.getAll(page).subscribe(data => {
-      this.items = data.data
-      this.meta = data.meta
+    this.itemService.getAll(page).subscribe(response => {
+      this.items = response.data
+      this.meta = response.meta
     })
   }
 

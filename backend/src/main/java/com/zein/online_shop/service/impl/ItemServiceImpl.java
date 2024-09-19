@@ -3,6 +3,8 @@ package com.zein.online_shop.service.impl;
 import com.zein.online_shop.dto.request.ItemRequest;
 import com.zein.online_shop.dto.response.ItemResponse;
 import com.zein.online_shop.dto.response.ListResponse;
+import com.zein.online_shop.dto.response.SearchOptionResponse;
+import com.zein.online_shop.model.Customer;
 import com.zein.online_shop.model.Item;
 import com.zein.online_shop.repository.ItemRepository;
 import com.zein.online_shop.service.ItemService;
@@ -90,5 +92,20 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
     @Override
     public void delete(Integer id) {
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    public List<SearchOptionResponse> search(String search) {
+        List<Item> items;
+
+        if (search != null) {
+            items = itemRepository.findByNameContainingIgnoreCaseAndIsAvailable(search, true);
+        }
+        else {
+            List<String> sorts = List.of("name,asc");
+            items = itemRepository.findAllBy(PageRequest.of(0, 10, Sort.by(getSortOrder(sorts)))).toList();
+        }
+
+        return Arrays.asList(modelMapper.map(items, SearchOptionResponse[].class));
     }
 }

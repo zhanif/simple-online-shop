@@ -6,9 +6,11 @@ export interface OrderResponse {
   customerId: number
   itemId: number
   code: string
-  totalPrice: string
+  totalPrice: number
   quantity: number
-  date: Date
+  date: number
   customer: CustomerResponse
   item: ItemResponse
+  createdTime: Date
+  lastModifiedTime: Date
 }

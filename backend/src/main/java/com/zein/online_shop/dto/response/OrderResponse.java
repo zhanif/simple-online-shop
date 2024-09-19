@@ -21,4 +21,6 @@ public class OrderResponse {
     private Date date;
     private CustomerResponse customer;
     private ItemResponse item;
+    private Date createdTime;
+    private Date lastModifiedTime;
 }

@@ -68,9 +68,9 @@ export class CustomerComponent implements OnInit {
   closeModalDelete = () => { this.isModalDeleteOpen = false }
 
   private getAll(page: number = 0) {
-    this.customerService.getAll(page).subscribe(data => {
-      this.customers = data.data
-      this.meta = data.meta
+    this.customerService.getAll(page).subscribe(response => {
+      this.customers = response.data
+      this.meta = response.meta
     })
   }
 

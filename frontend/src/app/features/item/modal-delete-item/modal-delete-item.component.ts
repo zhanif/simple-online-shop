@@ -34,7 +34,10 @@ export class ModalDeleteItemComponent implements OnInit {
   onSubmit() {
     this.itemService.delete(this.id).subscribe(
       (response) => { this.refresh() },
-      (error) => { console.error(error) }
+      (error) => { 
+        const message = error.error?.message || 'Unknown error'
+        this.apiErrors = Array.isArray(message) ? message : [message];
+      }
     )
   }
 
