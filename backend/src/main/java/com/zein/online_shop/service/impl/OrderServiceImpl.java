@@ -126,7 +126,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
             if (template == null) throw new FileNotFoundException("Template not found");
 
             JasperReport jasperReport = JasperCompileManager.compileReport(template);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/YYYY");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
             currencyFormat.setMaximumFractionDigits(0);
 
