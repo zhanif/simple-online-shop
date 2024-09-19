@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { OrderResponse } from '../../models/response/order-response.model';
 import { PaginationInfo } from '../../shared/models/pagination-info.model';
@@ -23,7 +23,8 @@ import { ModalDeleteOrderComponent } from './modal-delete-order/modal-delete-ord
     ModalDeleteOrderComponent
   ],
   templateUrl: './order.component.html',
-  styleUrl: './order.component.css'
+  styleUrl: './order.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class OrderComponent implements OnInit {
   orders: Array<OrderResponse> = []

@@ -1,5 +1,7 @@
 <app-modal-view-order *ngIf="isModalViewOpen" [closeModalView]="closeModalView" [id]="selectedId" />
 <app-modal-create-order *ngIf="isModalCreateOpen" [closeModalCreate]="closeModalCreate" [refresh]="refresh" />
+<app-modal-update-order *ngIf="isModalUpdateOpen" [closeModalUpdate]="closeModalUpdate" [refresh]="refresh" [id]="selectedId" />
+<app-modal-delete-order *ngIf="isModalDeleteOpen" [closeModalDelete]="closeModalDelete" [refresh]="refresh" [id]="selectedId" />
 
 <main class="flex justify-center">
   <div class="w-4/5 text-gray-800 pt-28">

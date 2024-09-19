@@ -7,7 +7,6 @@ import { faSave } from '@fortawesome/free-regular-svg-icons';
 import { ItemResponse } from '../../../models/response/item-response.model';
 import { ItemService } from '../../../services/item.service';
 import { ItemRequest } from '../../../models/request/item-request.model';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-modal-update-item',

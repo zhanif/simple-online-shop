@@ -23,7 +23,7 @@ import { ItemService } from '../../../services/item.service';
     NgSelectModule
   ],
   templateUrl: './modal-create-order.component.html',
-  styleUrl: './modal-create-order.component.css',
+  styleUrl: '../order.component.css',
   encapsulation: ViewEncapsulation.None
 })
 export class ModalCreateOrderComponent implements OnInit {
