@@ -5,7 +5,7 @@ export interface ItemResponse {
   stock: number
   price: number
   isAvailable: boolean
-  lastReStock: Date
+  lastReStock: number
   createdTime: Date
   lastModifiedTime: Date
 }

@@ -7,6 +7,7 @@ import { faSave } from '@fortawesome/free-regular-svg-icons';
 import { ItemResponse } from '../../../models/response/item-response.model';
 import { ItemService } from '../../../services/item.service';
 import { ItemRequest } from '../../../models/request/item-request.model';
+import { convertToDateTime } from '../../../core/utility';
 
 @Component({
   selector: 'app-modal-update-item',
@@ -70,11 +71,13 @@ export class ModalUpdateItemComponent implements OnInit {
     this.itemService.get(this.id).subscribe(
       (response: ItemResponse) => { 
         this.item = response
+        console.log(response);
+        
         this.form.patchValue({
           name: response.name,
           price: response.price,
           stock: response.stock,
-          lastReStock: response.lastReStock || null,
+          lastReStock: convertToDateTime(response.lastReStock).split(" ")[0] || null,
           isAvailable: response.isAvailable
         })
       },

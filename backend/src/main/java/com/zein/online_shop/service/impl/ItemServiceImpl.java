@@ -73,17 +73,16 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
         Item item = itemRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Item (ID: " + id + ") not found"));
 
-        Date lastReStock = null;
-        if (request.getStock() > item.getStock()) {
-            lastReStock = Objects.requireNonNullElse(request.getLastReStock(), new Date());
+        Date lastReStock = request.getLastReStock() == null ? new Date() : request.getLastReStock();
+        if (request.getStock() > item.getStock() && request.getLastReStock() == null) {
+            lastReStock = new Date();
         }
 
         item.setName(request.getName());
         item.setPrice(request.getPrice());
         item.setStock(request.getStock());
         item.setIsAvailable(request.getIsAvailable());
-
-        if (!Objects.isNull(lastReStock)) item.setLastReStock(lastReStock);
+        item.setLastReStock(lastReStock);
 
         item = itemRepository.save(item);
         return modelMapper.map(item, ItemResponse.class);
