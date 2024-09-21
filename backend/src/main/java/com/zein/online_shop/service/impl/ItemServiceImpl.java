@@ -30,10 +30,13 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ListResponse getAll(int page, int size, List<String> sort) {
-        Page<Item> items = itemRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
-        List<ItemResponse> responses = Arrays.asList(modelMapper.map(items.toList(), ItemResponse[].class));
+    public ListResponse getAll(int page, int size, List<String> sort, String search) {
+        Page<Item> items;
+        var pageRequest = PageRequest.of(page, size, Sort.by(getSortOrder(sort)));
+        if (search != null) items = itemRepository.findAllByNameContainingIgnoreCase(search, pageRequest);
+        else items = itemRepository.findAllBy(pageRequest);
 
+        List<ItemResponse> responses = Arrays.asList(modelMapper.map(items.toList(), ItemResponse[].class));
         return new ListResponse(responses, getPageMetadata(items));
     }
 
@@ -83,6 +86,7 @@ public class ItemServiceImpl extends BaseServiceImpl implements ItemService {
         item.setStock(request.getStock());
         item.setIsAvailable(request.getIsAvailable());
         item.setLastReStock(lastReStock);
+        if (item.getStock() == 0) item.setIsAvailable(false);
 
         item = itemRepository.save(item);
         return modelMapper.map(item, ItemResponse.class);

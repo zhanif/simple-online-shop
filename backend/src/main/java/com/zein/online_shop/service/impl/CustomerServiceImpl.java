@@ -37,12 +37,15 @@ public class CustomerServiceImpl extends BaseServiceImpl implements CustomerServ
     private static Duration REDIS_DURATION = Duration.ofMinutes(10);
     private static String MINIO_BUCKET = "simple-online-shop";
 
-
     @Override
-    public ListResponse getAll(int page, int size, List<String> sort) {
-        Page<Customer> customers = customerRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort))));
-        List<CustomerResponse> responses = customers.stream().map(this::mapCustomerToResponse).toList();
+    public ListResponse getAll(int page, int size, List<String> sort, String search) {
+        Page<Customer> customers = null;
+        var pageRequest = PageRequest.of(page, size, Sort.by(getSortOrder(sort)));
 
+        if (search != null) customers = customerRepository.findAllByNameContainingIgnoreCase(search, pageRequest);
+        else customers = customerRepository.findAllBy(pageRequest);
+
+        List<CustomerResponse> responses = customers.stream().map(this::mapCustomerToResponse).toList();
         return new ListResponse(responses, getPageMetadata(customers));
     }
 

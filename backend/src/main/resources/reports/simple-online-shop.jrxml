@@ -8,18 +8,12 @@
     <style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18.0"/>
     <style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12.0" bold="true"/>
     <style name="Detail" fontName="Arial" fontSize="12.0"/>
-    <field name="date" class="java.lang.String">
-    </field>
-    <field name="code" class="java.lang.String">
-    </field>
-    <field name="customer_name" class="java.lang.String">
-    </field>
-    <field name="item_name" class="java.lang.String">
-    </field>
-    <field name="quantity" class="java.lang.Integer">
-    </field>
-    <field name="total_price" class="java.lang.String">
-    </field>
+    <field name="date" class="java.lang.String" />
+    <field name="code" class="java.lang.String" />
+    <field name="customer_name" class="java.lang.String" />
+    <field name="item_name" class="java.lang.String" />
+    <field name="quantity" class="java.lang.Integer" />
+    <field name="total_price" class="java.lang.String" />
     <background splitType="Stretch"/>
     <title height="72" splitType="Stretch">
         <element kind="image" uuid="363fa2ad-70fc-43cb-9062-e6c62c7f48fc" x="275" y="0" width="300" height="64">

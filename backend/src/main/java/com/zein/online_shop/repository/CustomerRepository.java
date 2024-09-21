@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Page<Customer> findAllBy(PageRequest pageRequest);
+    Page<Customer> findAllByNameContainingIgnoreCase(String name, PageRequest pageRequest);
     boolean existsByPhone(String phone);
     boolean existsByCode(String code);
     boolean existsByPhoneAndIdNot(String phone, Integer id);

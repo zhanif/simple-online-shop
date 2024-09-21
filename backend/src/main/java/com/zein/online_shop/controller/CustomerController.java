@@ -22,9 +22,10 @@ public class CustomerController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "#{'createdTime,desc'.split('_')}") List<String> sort,
-        @RequestParam(required = false) String search
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) boolean choice
     ) {
-        return ResponseEntity.ok(search == null ? customerService.getAll(page, size, sort) : customerService.search(search));
+        return ResponseEntity.ok(!choice ? customerService.getAll(page, size, sort, search) : customerService.search(search));
     }
 
     @GetMapping("{id}")

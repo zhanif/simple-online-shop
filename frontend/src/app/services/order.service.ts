@@ -36,7 +36,7 @@ export class OrderService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  public export(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+  public export(page: number = 0, size: number = 10): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}?page=${page}&size=${size}&export=true`, { responseType: 'blob' });
   }
 }

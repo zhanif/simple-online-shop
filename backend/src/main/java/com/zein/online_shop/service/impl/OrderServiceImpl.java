@@ -105,6 +105,7 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
         order.setDate(request.getDate());
         order.setQuantity(request.getQuantity());
         order.setTotalPrice(order.getQuantity() * item.getPrice());
+        if (item.getStock() == 0) item.setIsAvailable(false);
 
         order = orderRepository.save(order);
         item = itemRepository.save(item);
@@ -118,8 +119,8 @@ public class OrderServiceImpl extends BaseServiceImpl implements OrderService {
     }
 
     @Override
-    public byte[] export() {
-        List<Order> orders = orderRepository.findAll();
+    public byte[] export(int page, int size, List<String> sort) {
+        List<Order> orders = orderRepository.findAllBy(PageRequest.of(page, size, Sort.by(getSortOrder(sort)))).toList();
         byte[] data;
         try {
             InputStream template = getClass().getResourceAsStream("/reports/simple-online-shop.jrxml");

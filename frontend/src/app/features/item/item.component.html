@@ -7,7 +7,17 @@
   <div class="w-4/5 text-gray-800 pt-28">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-semibold">Item</h1>
-      <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Item</a>
+      <div class="flex items-center space-x-2">
+        <div class="flex items-center border">
+          <input type="text" class="py-2.5 px-4 outline-none" placeholder="Search..." (input)="searchInput($event)" (keydown)="searchKeyDown($event)"/>
+          <button type="button" class="fill-gray-800 hover:fill-gray-600 py-4 px-4 transition ease-in-out" (click)="OnSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4" viewBox="0 0 512 512">
+              <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+            </svg>
+          </button>
+        </div>
+        <a class="inline-block border border-gray-300 font-medium cursor-pointer py-2.5 px-4 hover:bg-gray-100 transition ease-in-out" (click)="openModalCreate()">Add Item</a>
+      </div>
     </div>
 
     <div class="overflow-x-auto mt-8">

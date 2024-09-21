@@ -38,6 +38,8 @@ export class ItemComponent implements OnInit {
   faEye = faEye
   faTrashCan = faTrashCan
   faPenToSquare = faPenToSquare
+  searchQuery: string = ''
+  size = 10
 
   selectedId: number = 0
   isModalViewOpen = false
@@ -72,9 +74,9 @@ export class ItemComponent implements OnInit {
   closeModalDelete = () => { this.isModalDeleteOpen = false }
 
   private getAll(page: number = 0) {
-    this.itemService.getAll(page).subscribe(response => {
+    this.itemService.getAll(page, this.size, this.searchQuery).subscribe(response => {
       this.items = response.data
-      this.meta = response.meta
+      if (response.meta) this.meta = response.meta
     })
   }
 
@@ -84,6 +86,11 @@ export class ItemComponent implements OnInit {
     this.closeModalUpdate()
     this.closeModalDelete()
 
+    this.searchQuery = ''
     this.getAll()
   }
+
+  OnSearch() { this.getAll() }
+  searchInput(event: InputEvent | any) { this.searchQuery = event.target.value || '' }
+  searchKeyDown(event: KeyboardEvent | any) { if (event.key == 'Enter' || event.keyCode === 13) this.OnSearch() }
 }

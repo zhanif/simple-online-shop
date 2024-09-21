@@ -22,9 +22,10 @@ public class OrderController {
     public ResponseEntity<?> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "#{'createdTime,desc'.split('_')}") List<String> sort
+            @RequestParam(defaultValue = "#{'createdTime,desc'.split('_')}") List<String> sort,
+            @RequestParam(required = false) boolean export
     ) {
-        return ResponseEntity.ok(orderService.getAll(page, size, sort));
+        return ResponseEntity.ok(export ? orderService.export(page, size, sort) : orderService.getAll(page, size, sort));
     }
 
     @GetMapping("{id}")
@@ -47,10 +48,5 @@ public class OrderController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         orderService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @GetMapping("/export")
-    public ResponseEntity<?> export() {
-        return ResponseEntity.ok(orderService.export());
     }
 }

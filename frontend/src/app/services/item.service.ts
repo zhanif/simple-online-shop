@@ -16,8 +16,8 @@ export class ItemService {
     private http: HttpClient
   ) {}
 
-  public getAll(page: number = 0, size: number = 10): Observable<ListResponse<ItemResponse>> {
-    return this.http.get<ListResponse<ItemResponse>>(`${this.apiUrl}?page=${page}&size=${size}`)
+  public getAll(page: number = 0, size: number = 10, search: string = ''): Observable<ListResponse<ItemResponse>> {
+    return this.http.get<ListResponse<ItemResponse>>(`${this.apiUrl}?page=${page}&size=${size}&search=${search}`)
   }
 
   public get(id: number = 0): Observable<ItemResponse> {
@@ -37,6 +37,6 @@ export class ItemService {
   }
 
   public search(query: string): Observable<Array<SearchOptionResponse>> {
-    return this.http.get<Array<SearchOptionResponse>>(`${this.apiUrl}?search=${query}`)
+    return this.http.get<Array<SearchOptionResponse>>(`${this.apiUrl}?search=${query}&choice=true`)
   }
 }

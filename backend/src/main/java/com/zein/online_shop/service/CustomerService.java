@@ -8,7 +8,7 @@ import com.zein.online_shop.dto.response.SearchOptionResponse;
 import java.util.List;
 
 public interface CustomerService {
-    ListResponse getAll(int page, int size, List<String> sort);
+    ListResponse getAll(int page, int size, List<String> sort, String search);
     CustomerResponse create(CustomerRequest request);
     CustomerResponse update(Integer id, CustomerRequest request);
     void delete(Integer id);

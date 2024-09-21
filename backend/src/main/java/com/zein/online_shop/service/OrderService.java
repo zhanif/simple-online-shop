@@ -13,5 +13,5 @@ public interface OrderService {
     OrderResponse create(CreateOrderRequest request);
     OrderResponse update(Integer id, UpdateOrderRequest request);
     void delete(Integer id);
-    byte[] export();
+    byte[] export(int page, int size, List<String> sort);
 }

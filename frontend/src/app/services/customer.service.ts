@@ -16,8 +16,8 @@ export class CustomerService {
     private http: HttpClient
   ) {}
 
-  public getAll(page: number = 0, size: number = 10): Observable<ListResponse<CustomerResponse>> {
-    return this.http.get<ListResponse<CustomerResponse>>(`${this.apiUrl}?page=${page}&size=${size}`)
+  public getAll(page: number = 0, size: number = 10, search: string = ''): Observable<ListResponse<CustomerResponse>> {
+    return this.http.get<ListResponse<CustomerResponse>>(`${this.apiUrl}?page=${page}&size=${size}&search=${search}`)
   }
 
   public get(id: number): Observable<CustomerResponse> {
@@ -37,6 +37,6 @@ export class CustomerService {
   }
 
   public search(query: string): Observable<Array<SearchOptionResponse>> {
-    return this.http.get<Array<SearchOptionResponse>>(`${this.apiUrl}?search=${query}`)
+    return this.http.get<Array<SearchOptionResponse>>(`${this.apiUrl}?search=${query}&choice=true`)
   }
 }

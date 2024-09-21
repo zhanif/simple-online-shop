@@ -37,6 +37,8 @@ export class OrderComponent implements OnInit {
   faEye = faEye
   faTrashCan = faTrashCan
   faPenToSquare = faPenToSquare
+  size = 10
+  currentPage = 0
 
   selectedId: number = 0
   isModalViewOpen = false
@@ -74,7 +76,8 @@ export class OrderComponent implements OnInit {
   private getAll(page: number = 0) {
     this.orderService.getAll(page).subscribe(response => {
       this.orders = response.data
-      this.meta = response.meta
+      if (response.meta) this.meta = response.meta
+      this.currentPage = page
     })
   }
 
@@ -88,7 +91,7 @@ export class OrderComponent implements OnInit {
   }
 
   export() {
-    this.orderService.export().subscribe(
+    this.orderService.export(this.currentPage, this.size).subscribe(
       (blob: Blob) => {
         const url = window.URL.createObjectURL(blob)
         const anchor = document.createElement('a')

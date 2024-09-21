@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     Page<Item> findAllBy(PageRequest pageRequest);
+    Page<Item> findAllByNameContainingIgnoreCase(String name, PageRequest pageRequest);
     boolean existsByCode(String code);
     Optional<Item> findByIdAndIsAvailable(Integer itemId, Boolean isAvailable);
 
